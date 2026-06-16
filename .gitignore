@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Convex
+.agents/
+.claude/
+AGENTS.md
+CLAUDE.md
+skills-lock.json
+convex/_generated/ai/
