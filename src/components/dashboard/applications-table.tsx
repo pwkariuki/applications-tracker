@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Filter, Plus, Search } from "lucide-react";
+import { Check, Filter, Plus, Search } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,26 +16,60 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  type ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import type { Application } from "@/data/types";
+import {
+  STATUS_CONFIG,
+  STATUS_LIST,
+  type Application,
+  type Status,
+} from "@/data/types";
 import { columns } from "./columns";
 
 function ApplicationsTable({ data }: { data: Application[] }) {
   const [search, setSearch] = useState<string>("");
-
-  function handleSearch(value: string) {
-    setSearch(value);
-    // TODO: perform table search with the value
-  }
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     data,
     columns,
+    state: {
+      sorting,
+      columnFilters,
+    },
+    initialState: {
+      pagination: { pageSize: 15 },
+    },
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    onSortingChange: setSorting,
   });
+
+  const selectedStatuses =
+    (table.getColumn("status")?.getFilterValue() as Status[] | undefined) ?? [];
+
+  function handleSearch(value: string) {
+    setSearch(value);
+    table.getColumn("company")?.setFilterValue(value);
+  }
+
+  function toggleStatus(status: Status) {
+    const next = selectedStatuses.includes(status)
+      ? selectedStatuses.filter((s) => s !== status)
+      : [...selectedStatuses, status];
+    table.getColumn("status")?.setFilterValue(next);
+  }
 
   return (
     <div className="space-y-3">
@@ -52,13 +86,39 @@ function ApplicationsTable({ data }: { data: Application[] }) {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"}>
+            <Button variant={"outline"} className="gap-1.5">
               <Filter className="w-4 h-4" />
               Status
+              {selectedStatuses.length > 0 && (
+                <span className="ml-1 rounded bg-muted px-1.5 text-xs">
+                  {selectedStatuses.length}
+                </span>
+              )}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            {/** TODO: Add filters for content */}
+          <DropdownMenuContent align="end" className="w-44 p-1">
+            {STATUS_LIST.map((status) => {
+              const checked = selectedStatuses.includes(status);
+              return (
+                <Button
+                  key={status}
+                  variant={"ghost"}
+                  onClick={() => toggleStatus(status)}
+                  className="flex w-full items-center justify-start gap-2 px-2 py-1.5 text-sm font-normal hover:bg-accent"
+                >
+                  <span className="flex h-4 w-4 items-center justify-center">
+                    {checked && <Check className="h-3.5 w-3.5" />}
+                  </span>
+                  <span
+                    className={`h-2.5 w-2.5 shrink-0 rounded-full ${STATUS_CONFIG[status].dot}`}
+                    aria-hidden="true"
+                  />
+                  <span className="text-left">
+                    {STATUS_CONFIG[status].label}
+                  </span>
+                </Button>
+              );
+            })}
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -112,6 +172,28 @@ function ApplicationsTable({ data }: { data: Application[] }) {
             )}
           </TableBody>
         </Table>
+      </div>
+
+      <div className="flex items-center justify-end gap-2 py-4">
+        <Button
+          variant={"outline"}
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <span className="text-sm text-muted-foreground">
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
+        </span>
+        <Button
+          variant={"outline"}
+          size={"sm"}
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
       </div>
     </div>
   );
