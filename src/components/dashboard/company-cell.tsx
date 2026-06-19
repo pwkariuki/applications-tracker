@@ -1,4 +1,4 @@
-import type { Application } from "@/data/types";
+import type { Doc } from "../../../convex/_generated/dataModel";
 
 // Deterministic color per company so the logo square is stable across renders
 const LOGO_COLORS = [
@@ -18,7 +18,11 @@ const colorFor = (company: string): string => {
   return LOGO_COLORS[Math.abs(hash) % LOGO_COLORS.length];
 };
 
-const CompanyCell = ({ application }: { application: Application }) => {
+type CompanyCellProps = {
+  application: Doc<"applications">;
+};
+
+const CompanyCell = ({ application }: CompanyCellProps) => {
   const initials = application.company.slice(0, 2);
   return (
     <div className="flex items-center gap-4">

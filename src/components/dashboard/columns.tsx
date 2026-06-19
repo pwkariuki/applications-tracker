@@ -1,12 +1,13 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { STATUS_CONFIG, type Application } from "@/data/types";
+import { STATUS_CONFIG } from "@/data/types";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import CompanyCell from "@/components/dashboard/company-cell";
 import { StatusBadge } from "@/components/dashboard/status-badge";
+import type { Doc } from "../../../convex/_generated/dataModel";
 
-export const columns: ColumnDef<Application>[] = [
+export const columns: ColumnDef<Doc<"applications">>[] = [
   {
     accessorKey: "company",
     header: "Company",

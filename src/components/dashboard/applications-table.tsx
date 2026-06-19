@@ -25,15 +25,15 @@ import {
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  STATUS_CONFIG,
-  STATUS_LIST,
-  type Application,
-  type Status,
-} from "@/data/types";
+import { STATUS_CONFIG, STATUS_LIST, type Status } from "@/data/types";
 import { columns } from "./columns";
+import type { Doc } from "../../../convex/_generated/dataModel";
 
-function ApplicationsTable({ data }: { data: Application[] }) {
+type ApplicationsTableProps = {
+  data: Doc<"applications">[];
+};
+
+function ApplicationsTable({ data }: ApplicationsTableProps) {
   const [search, setSearch] = useState<string>("");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);

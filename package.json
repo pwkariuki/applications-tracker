@@ -10,7 +10,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{js,ts,jsx,tsx}\" --config \".prettierrc.json\"",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "seed": "npx tsx scripts/seed.ts"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@faker-js/faker": "^10.4.0",
     "@types/node": "^24.12.4",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

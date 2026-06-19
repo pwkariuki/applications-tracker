@@ -1,9 +1,15 @@
 import StatsRow from "@/components/dashboard/stats-row";
 import ApplicationsTable from "@/components/dashboard/applications-table";
-import { sampleApplications, type Application } from "@/data/types";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import type { Doc } from "../../../convex/_generated/dataModel";
 
 function Dashboard() {
-  const data: Application[] = sampleApplications;
+  const data: Doc<"applications">[] = useQuery(api.applications.list) ?? [];
+
+  if (data === undefined) {
+    return <p className="text-muted-foreground">Loading applications...</p>
+  }
 
   return (
     <div className="mx-auto max-w-4xl space-y-5 px-4 py-8">
@@ -15,7 +21,7 @@ function Dashboard() {
           Track every application, interview, and offer in one place.
         </p>
       </div>
-      <StatsRow />
+      <StatsRow applications={data}/>
 
       <ApplicationsTable data={data} />
     </div>
