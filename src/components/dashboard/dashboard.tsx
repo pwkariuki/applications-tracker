@@ -8,7 +8,7 @@ function Dashboard() {
   const data: Doc<"applications">[] = useQuery(api.applications.list) ?? [];
 
   if (data === undefined) {
-    return <p className="text-muted-foreground">Loading applications...</p>
+    return <p className="text-muted-foreground">Loading applications...</p>;
   }
 
   return (
@@ -21,7 +21,7 @@ function Dashboard() {
           Track every application, interview, and offer in one place.
         </p>
       </div>
-      <StatsRow applications={data}/>
+      <StatsRow applications={data} />
 
       <ApplicationsTable data={data} />
     </div>

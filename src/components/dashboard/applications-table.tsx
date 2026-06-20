@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Check, Filter, Plus, Search } from "lucide-react";
+import { Check, Filter, Search } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,6 +28,7 @@ import {
 import { STATUS_CONFIG, STATUS_LIST, type Status } from "@/data/types";
 import { columns } from "./columns";
 import type { Doc } from "../../../convex/_generated/dataModel";
+import AddApplicationDialog from "./add-application-dialog";
 
 type ApplicationsTableProps = {
   data: Doc<"applications">[];
@@ -122,10 +123,7 @@ function ApplicationsTable({ data }: ApplicationsTableProps) {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Button>
-          <Plus className="w-4 h-4" />
-          Add
-        </Button>
+        <AddApplicationDialog />
       </div>
 
       <div className="overflow-hidden rounded-md border">

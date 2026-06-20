@@ -1,11 +1,18 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { STATUS_CONFIG } from "@/data/types";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, SquarePen } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import CompanyCell from "@/components/dashboard/company-cell";
 import { StatusBadge } from "@/components/dashboard/status-badge";
 import type { Doc } from "../../../convex/_generated/dataModel";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import DeleteApplicationDialog from "./delete-application-dialog";
+import { useState } from "react";
 
 export const columns: ColumnDef<Doc<"applications">>[] = [
   {
@@ -70,5 +77,36 @@ export const columns: ColumnDef<Doc<"applications">>[] = [
       </span>
     ),
   },
-  // TODO: Add delete application action
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const application = row.original;
+      const [open, setOpen] = useState<boolean>(false);
+
+      return (
+        <DropdownMenu open={open} onOpenChange={setOpen}>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"ghost"} className="h-8 w-8 p-0">
+              <MoreHorizontal className="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DeleteApplicationDialog
+              id={application._id}
+              company={application.company}
+              role={application.role}
+              onDeleted={() => setOpen(false)}
+            />
+            <Button
+              variant={"ghost"}
+              className="flex justify-center w-full cursor-pointer"
+            >
+              <SquarePen />
+              Edit
+            </Button>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+  },
 ];

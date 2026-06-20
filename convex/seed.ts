@@ -27,8 +27,8 @@ export const insertSeedData = internalMutation({
   handler: async (ctx, args) => {
     for (const application of args.applications) {
       await ctx.db.insert("applications", {
-        ...application
-      })
+        ...application,
+      });
     }
   },
 });

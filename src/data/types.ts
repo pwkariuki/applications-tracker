@@ -49,7 +49,8 @@ export const STATUS_CONFIG: Record<
     label: "Signed",
     order: 5,
     dot: "bg-emerald-600",
-    badge: "bg-emerald-300 text-white dark:bg-emerald-600 dark:text-white",
+    badge:
+      "bg-emerald-300 text-emerald-900 dark:bg-emerald-600 dark:text-emerald-400",
   },
   rejected: {
     label: "Rejected",
@@ -67,7 +68,11 @@ export const STATUS_CONFIG: Record<
 
 export const STATUS_LIST = Object.keys(STATUS_CONFIG) as Status[];
 
-export const ACTIVE_STATUSES: Status[] = ["phone_screen", "technical", "onsite"];
+export const ACTIVE_STATUSES: Status[] = [
+  "phone_screen",
+  "technical",
+  "onsite",
+];
 
 export type Source =
   | "Referral"

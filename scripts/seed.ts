@@ -37,10 +37,12 @@ const applications = Array.from({ length: APPLICATION_COUNT }, () => {
       " Engineer",
     notes: faker.lorem.paragraphs(),
     autoUpdated: faker.datatype.boolean(),
-    lastUpdate: faker.date.between({
-      from: "2026-01-01T00:00:00.000Z",
-      to: Date.now(),
-    }).getTime(),
+    lastUpdate: faker.date
+      .between({
+        from: "2026-01-01T00:00:00.000Z",
+        to: Date.now(),
+      })
+      .getTime(),
   };
 });
 
