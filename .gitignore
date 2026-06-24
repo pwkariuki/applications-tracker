@@ -33,4 +33,3 @@ convex/_generated/ai/
 
 # TanStack router
 .tanstack
-routeTree.gen.ts
