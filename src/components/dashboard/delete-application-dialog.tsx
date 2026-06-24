@@ -12,6 +12,7 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Trash } from "lucide-react";
+import { useRef, useState } from "react";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
@@ -30,14 +31,25 @@ function DeleteApplicationDialog({
   onDeleted,
 }: DeleteApplicationDialogProps) {
   const deleteApplication = useMutation(api.applications.remove);
+  const [open, setOpen] = useState(false);
+  const confirmedRef = useRef(false);
 
-  async function handleDelete() {
-    await deleteApplication({ id });
-    onDeleted?.();
+  function handleConfirm(e: React.MouseEvent) {
+    e.stopPropagation();
+    confirmedRef.current = true;
+    setOpen(false);
+  }
+
+  function handleCloseAutoFocus(e: Event) {
+    e.preventDefault();
+    if (confirmedRef.current) {
+      confirmedRef.current = false;
+      deleteApplication({ id }).then(() => onDeleted?.());
+    }
   }
 
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger
         className={cn(
           buttonVariants({ variant: "destructive" }),
@@ -48,8 +60,10 @@ function DeleteApplicationDialog({
         <Trash className="h-4 w-4" />
         Delete
       </AlertDialogTrigger>
-
-      <AlertDialogContent>
+      <AlertDialogContent
+        onClick={(e) => e.stopPropagation()}
+        onCloseAutoFocus={handleCloseAutoFocus}
+      >
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
@@ -59,13 +73,15 @@ function DeleteApplicationDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel
-            className={cn(buttonVariants({ variant: "outline" }))}
-            onClick={() => onDeleted?.()}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDeleted?.();
+            }}
           >
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
-            onClick={handleDelete}
+            onClick={handleConfirm}
             className={cn(buttonVariants({ variant: "destructive" }))}
           >
             Delete
