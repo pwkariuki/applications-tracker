@@ -30,3 +30,6 @@ AGENTS.md
 CLAUDE.md
 skills-lock.json
 convex/_generated/ai/
+
+# TanStack router
+routeTree.gen.ts

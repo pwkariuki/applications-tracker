@@ -29,6 +29,7 @@ import { STATUS_CONFIG, STATUS_LIST, type Status } from "@/data/types";
 import { columns } from "./columns";
 import type { Doc } from "../../../convex/_generated/dataModel";
 import AddApplicationDialog from "./add-application-dialog";
+import { useNavigate } from "@tanstack/react-router";
 
 type ApplicationsTableProps = {
   data: Doc<"applications">[];
@@ -38,6 +39,8 @@ function ApplicationsTable({ data }: ApplicationsTableProps) {
   const [search, setSearch] = useState<string>("");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const navigate = useNavigate();
 
   const table = useReactTable({
     data,
@@ -147,7 +150,16 @@ function ApplicationsTable({ data }: ApplicationsTableProps) {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} className="cursor-pointer">
+                <TableRow
+                  key={row.id}
+                  className="cursor-pointer"
+                  onClick={() =>
+                    navigate({
+                      to: "/applications/$id",
+                      params: { id: row.original._id },
+                    })
+                  }
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(

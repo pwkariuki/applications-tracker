@@ -37,8 +37,6 @@ function EditStatusDialog({ id, status, onEdit }: EditStatusDialogProps) {
 
   const updateStatus = useMutation(api.applications.updateStatus);
 
-  // Reset the select back to the row's current status each time the dialog opens,
-  // so a previous cancel doesn't leave a stale choice.
   function handleOpenChange(next: boolean) {
     if (next) setValue(status);
     setOpen(next);

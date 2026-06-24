@@ -10,7 +10,7 @@ const LOGO_COLORS = [
   "bg-teal-100 text-teal-700 dark:bg-teal-950 dark:text-teal-300",
 ];
 
-const colorFor = (company: string): string => {
+export const colorFor = (company: string): string => {
   let hash = 0;
   for (let i = 0; i < company.length; i++) {
     hash = company.charCodeAt(i) + ((hash << 5) - hash);

@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { STATUS_CONFIG } from "@/data/types";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, MoreHorizontal, SquarePen } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import CompanyCell from "@/components/dashboard/company-cell";
 import { StatusBadge } from "@/components/dashboard/status-badge";
