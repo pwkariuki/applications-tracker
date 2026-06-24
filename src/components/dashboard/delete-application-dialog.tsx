@@ -43,6 +43,7 @@ function DeleteApplicationDialog({
           buttonVariants({ variant: "destructive" }),
           "w-full cursor-pointer",
         )}
+        onClick={(e) => e.stopPropagation()}
       >
         <Trash className="h-4 w-4" />
         Delete
