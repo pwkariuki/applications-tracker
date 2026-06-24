@@ -18,7 +18,7 @@ export default defineSchema({
     role: v.string(),
     status: StatusTypes,
     source: v.string(),
-    notes: v.string(),
+    notes: v.optional(v.string()),
     lastUpdate: v.number(),
     autoUpdated: v.boolean(),
   }),

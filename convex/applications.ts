@@ -49,7 +49,7 @@ export const update = mutation({
     company: v.optional(v.string()),
     role: v.optional(v.string()),
     source: v.optional(v.string()),
-    noted: v.optional(v.string()),
+    notes: v.optional(v.string()),
   },
   handler: async (ctx, { id, ...fields }) => {
     const existing = await ctx.db.get(id);
@@ -82,6 +82,24 @@ export const updateStatus = mutation({
       status: args.status,
       lastUpdate: Date.now(),
       autoUpdated: args.auto ?? false,
+    });
+  },
+});
+
+// Update notes
+export const updateNotes = mutation({
+  args: {
+    id: v.id("applications"),
+    notes: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const existing = await ctx.db.get(args.id);
+    if (!existing) {
+      throw new Error("Application not found");
+    }
+
+    await ctx.db.patch(args.id, {
+      notes: args.notes,
     });
   },
 });

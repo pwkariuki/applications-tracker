@@ -14,6 +14,7 @@ import type { Id } from "../../../convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 import { colorFor } from "@/components/dashboard/company-cell";
 import SelectStatus from "./select-status";
+import NotesEditor from "./edit-notes";
 
 function PropertyRow({
   icon,
@@ -126,17 +127,7 @@ function ApplicationDetail({ id }: { id: string }) {
         </PropertyRow>
       </div>
 
-      <div className="mb-2 text-sm font-medium text-muted-foreground">
-        Notes
-      </div>
-      {/* TODO: swap this read-only view for an autosave Textarea bound to `notes`. */}
-      <div className="min-h-30 rounded-lg border p-4 text-sm leading-relaxed">
-        {application.notes ? (
-          <p className="whitespace-pre-wrap">{application.notes}</p>
-        ) : (
-          <p className="text-muted-foreground">No notes yet.</p>
-        )}
-      </div>
+      <NotesEditor id={application._id} initial={application.notes} />
 
       {/* TODO: render the statusHistory timeline here once that table is populated. */}
 
