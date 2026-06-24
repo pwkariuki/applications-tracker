@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import DeleteApplicationDialog from "./delete-application-dialog";
 import { useState } from "react";
+import EditStatusDialog from "./edit-status-dialog";
 
 export const columns: ColumnDef<Doc<"applications">>[] = [
   {
@@ -91,19 +92,17 @@ export const columns: ColumnDef<Doc<"applications">>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
+            <EditStatusDialog
+              id={application._id}
+              status={application.status}
+              onEdit={() => setOpen(false)}
+            />
             <DeleteApplicationDialog
               id={application._id}
               company={application.company}
               role={application.role}
               onDeleted={() => setOpen(false)}
             />
-            <Button
-              variant={"ghost"}
-              className="flex justify-center w-full cursor-pointer"
-            >
-              <SquarePen />
-              Edit
-            </Button>
           </DropdownMenuContent>
         </DropdownMenu>
       );
