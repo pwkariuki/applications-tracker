@@ -82,3 +82,5 @@ export type Source =
   | "Email"
   | "Handshake"
   | "LinkedIn";
+
+export type ThemeType = "light" | "dark" | "system";

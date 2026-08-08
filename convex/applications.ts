@@ -1,12 +1,20 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { StatusTypes } from "./schema";
+import { getAuthUserId } from "@convex-dev/auth/server";
 
 // Read all applications, newest first
 export const list = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("applications").order("desc").collect();
+    const userId = await getAuthUserId(ctx);
+    if (userId === null) return [];
+
+    return await ctx.db
+      .query("applications")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .order("desc")
+      .collect();
   },
 });
 
@@ -16,7 +24,11 @@ export const get = query({
     id: v.id("applications"),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.get(args.id);
+    const userId = await getAuthUserId(ctx);
+    if (userId === null) return null;
+    const application = await ctx.db.get(args.id);
+    if (!application || application.userId !== userId) return null;
+    return application;
   },
 });
 
@@ -30,7 +42,12 @@ export const create = mutation({
     notes: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (userId === null) {
+      throw new Error("Not authenticated");
+    }
     return await ctx.db.insert("applications", {
+      userId,
       company: args.company,
       role: args.role,
       status: args.status ?? "applied",
@@ -52,10 +69,10 @@ export const update = mutation({
     notes: v.optional(v.string()),
   },
   handler: async (ctx, { id, ...fields }) => {
+    const userId = await getAuthUserId(ctx);
+    if (userId === null) throw new Error("Not authenticated");
     const existing = await ctx.db.get(id);
-    if (!existing) {
-      throw new Error("Application not found");
-    }
+    if (!existing || existing.userId !== userId) throw new Error("Not found");
 
     const patch = Object.fromEntries(
       Object.entries(fields).filter(([, value]) => value !== undefined),
@@ -73,10 +90,10 @@ export const updateStatus = mutation({
     auto: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (userId === null) throw new Error("Not authenticated");
     const existing = await ctx.db.get(args.id);
-    if (!existing) {
-      throw new Error("Application not found");
-    }
+    if (!existing || existing.userId !== userId) throw new Error("Not found");
 
     await ctx.db.patch(args.id, {
       status: args.status,
@@ -93,10 +110,10 @@ export const updateNotes = mutation({
     notes: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (userId === null) throw new Error("Not authenticated");
     const existing = await ctx.db.get(args.id);
-    if (!existing) {
-      throw new Error("Application not found");
-    }
+    if (!existing || existing.userId !== userId) throw new Error("Not found");
 
     await ctx.db.patch(args.id, {
       notes: args.notes,
@@ -110,6 +127,10 @@ export const remove = mutation({
     id: v.id("applications"),
   },
   handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (userId === null) throw new Error("Not authenticated");
+    const existing = await ctx.db.get(args.id);
+    if (!existing || existing.userId !== userId) throw new Error("Not found");
     await ctx.db.delete(args.id);
   },
 });

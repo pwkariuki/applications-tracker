@@ -1,3 +1,4 @@
+import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
@@ -13,7 +14,10 @@ export const StatusTypes = v.union(
 );
 
 export default defineSchema({
+  ...authTables,
+
   applications: defineTable({
+    userId: v.id("users"),
     company: v.string(),
     role: v.string(),
     status: StatusTypes,
@@ -21,5 +25,5 @@ export default defineSchema({
     notes: v.optional(v.string()),
     lastUpdate: v.number(),
     autoUpdated: v.boolean(),
-  }),
+  }).index("by_user", ["userId"]),
 });
