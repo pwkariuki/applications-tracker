@@ -12,6 +12,8 @@ import type * as applications from "../applications.js";
 import type * as auth from "../auth.js";
 import type * as classify from "../classify.js";
 import type * as http from "../http.js";
+import type * as notifications from "../notifications.js";
+import type * as reconcile from "../reconcile.js";
 import type * as users from "../users.js";
 
 import type {
@@ -25,6 +27,8 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   classify: typeof classify;
   http: typeof http;
+  notifications: typeof notifications;
+  reconcile: typeof reconcile;
   users: typeof users;
 }>;
 

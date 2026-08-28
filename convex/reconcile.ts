@@ -40,27 +40,28 @@ export const reconcileClassification = mutation({
       .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
 
-    const target = normalizeCompanyName(args.company)
-    const matches = apps.filter((a) => normalizeCompanyName(a.company) === target)
+    const target = normalizeCompanyName(args.company);
+    const matches = apps.filter(
+      (a) => normalizeCompanyName(a.company) === target,
+    );
 
     // Low confidence or ambiguous matches go to review queue
     const low_confidence = args.confidence < CONFIDENCE_THRESHOLD;
     const ambiguous = matches.length !== 1;
     if (low_confidence || ambiguous) {
-      await ctx.db
-        .insert("reviewQueue", {
-          userId,
-          emailFrom: args.emailFrom,
-          emailSnippet: args.emailSnippet,
-          emailSubject: args.emailSubject,
-          proposedCompany: args.company,
-          proposedStatus: args.status,
-          confidence: args.confidence,
-          matchedApplicationId: matches.length === 1 ? matches[0]._id : undefined,
-          state: "pending",
-          createdAt: Date.now(),
-        });
-        return { outcome: "queued" as const };
+      await ctx.db.insert("reviewQueue", {
+        userId,
+        emailFrom: args.emailFrom,
+        emailSnippet: args.emailSnippet,
+        emailSubject: args.emailSubject,
+        proposedCompany: args.company,
+        proposedStatus: args.status,
+        confidence: args.confidence,
+        matchedApplicationId: matches.length === 1 ? matches[0]._id : undefined,
+        state: "pending",
+        createdAt: Date.now(),
+      });
+      return { outcome: "queued" as const };
     }
 
     // Auto-update and notify high confidence scores

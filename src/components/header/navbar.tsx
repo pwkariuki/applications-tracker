@@ -40,6 +40,7 @@ function Navbar() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
+          <Notifications />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -83,5 +84,6 @@ function Navbar() {
     </header>
   );
 }
+import Notifications from "./notifications";
 
 export default Navbar;
