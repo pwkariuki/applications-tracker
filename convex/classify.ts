@@ -24,7 +24,9 @@ const classificationSchema = z.object({
   company: z
     .string()
     .describe("The hiring company name, or empty string if unclear."),
-  status: STATUS_ENUM.nullable().describe("The application stage this email indicates, or null if not an application email."),
+  status: STATUS_ENUM.nullable().describe(
+    "The application stage this email indicates, or null if not an application email.",
+  ),
   confidence: z
     .number()
     .min(0)
