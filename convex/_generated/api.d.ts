@@ -10,6 +10,7 @@
 
 import type * as applications from "../applications.js";
 import type * as auth from "../auth.js";
+import type * as classify from "../classify.js";
 import type * as http from "../http.js";
 import type * as users from "../users.js";
 
@@ -22,6 +23,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   applications: typeof applications;
   auth: typeof auth;
+  classify: typeof classify;
   http: typeof http;
   users: typeof users;
 }>;
