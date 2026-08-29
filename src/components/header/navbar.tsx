@@ -39,8 +39,9 @@ function Navbar() {
         <div className="flex-1" />
 
         <div className="flex items-center gap-2">
-          <ThemeToggle />
+          <ReviewNavButton />
           <Notifications />
+          <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -85,5 +86,6 @@ function Navbar() {
   );
 }
 import Notifications from "./notifications";
+import ReviewNavButton from "./review-nav-button";
 
 export default Navbar;

@@ -14,6 +14,7 @@ import type * as classify from "../classify.js";
 import type * as http from "../http.js";
 import type * as notifications from "../notifications.js";
 import type * as reconcile from "../reconcile.js";
+import type * as reviewQueue from "../reviewQueue.js";
 import type * as users from "../users.js";
 
 import type {
@@ -29,6 +30,7 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   notifications: typeof notifications;
   reconcile: typeof reconcile;
+  reviewQueue: typeof reviewQueue;
   users: typeof users;
 }>;
 

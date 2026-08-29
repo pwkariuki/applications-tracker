@@ -7,7 +7,7 @@ const CONFIDENCE_THRESHOLD = 0.75;
 
 function normalizeCompanyName(name: string): string {
   return name
-    .toLocaleLowerCase()
+    .toLowerCase()
     .replace(/\b(inc|llc|ltd|corp|co|team|the|recruiting|talent)\b/g, "")
     .replace(/[^a-z0-9]/g, "")
     .trim();
