@@ -11,6 +11,9 @@
 import type * as applications from "../applications.js";
 import type * as auth from "../auth.js";
 import type * as classify from "../classify.js";
+import type * as gmail from "../gmail.js";
+import type * as gmailAuth from "../gmailAuth.js";
+import type * as gmailTokens from "../gmailTokens.js";
 import type * as http from "../http.js";
 import type * as notifications from "../notifications.js";
 import type * as reconcile from "../reconcile.js";
@@ -27,6 +30,9 @@ declare const fullApi: ApiFromModules<{
   applications: typeof applications;
   auth: typeof auth;
   classify: typeof classify;
+  gmail: typeof gmail;
+  gmailAuth: typeof gmailAuth;
+  gmailTokens: typeof gmailTokens;
   http: typeof http;
   notifications: typeof notifications;
   reconcile: typeof reconcile;

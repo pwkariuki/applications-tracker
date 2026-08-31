@@ -43,9 +43,9 @@ export const classifyEmail = action({
     body: v.string(),
     from: v.optional(v.string()),
   },
-  handler: async (ctx, args) => {
+  handler: async (_ctx, args) => {
     const { output } = await generateText({
-      model: anthropic("claude-sonnet-4-6"),
+      model: anthropic("claude-sonnet-5"),
       output: Output.object({ schema: classificationSchema }),
       prompt: `Classify this email for a job-application tracker.\n\n
       From: ${args.from ?? "unknown"}\n

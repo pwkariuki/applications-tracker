@@ -28,7 +28,7 @@ export default defineSchema({
   }).index("by_user", ["userId"]),
 
   // Per-user Gmail auth tokens
-  gmainTokens: defineTable({
+  gmailTokens: defineTable({
     userId: v.id("users"),
     accessToken: v.string(),
     refreshToken: v.string(),

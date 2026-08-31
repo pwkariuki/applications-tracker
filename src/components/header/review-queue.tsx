@@ -1,13 +1,15 @@
 import { useQuery, useMutation } from "convex/react";
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, Check, Inbox } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Inbox, Mail } from "lucide-react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/dashboard/status-badge";
+import { getGmailAuthUrl } from "@/lib/gmail-auth";
 
 function ReviewQueue() {
   const items = useQuery(api.reviewQueue.list) ?? [];
+  const gmail = useQuery(api.gmail.connectionStatus);
   const approve = useMutation(api.reviewQueue.approve);
   const dismiss = useMutation(api.reviewQueue.dismiss);
 
@@ -39,11 +41,34 @@ function ReviewQueue() {
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
             <Inbox className="h-6 w-6 text-muted-foreground" />
           </div>
-          <h3 className="mt-4 text-base font-medium">All caught up</h3>
-          <p className="mt-1 max-w-xs text-sm text-muted-foreground">
-            Nothing waiting for review. New low-confidence matches will show up
-            here.
-          </p>
+          {gmail && !gmail.connected ? (
+            <>
+              <h3 className="mt-4 text-base font-medium">
+                Auto-track from your inbox
+              </h3>
+              <p className="mt-1 max-w-xs text-sm text-muted-foreground">
+                Connect Gmail and we'll read application emails and update
+                statuses for you — you just confirm the uncertain ones here.
+              </p>
+              <Button
+                className="mt-5"
+                onClick={() => {
+                  window.location.href = getGmailAuthUrl();
+                }}
+              >
+                <Mail className="h-4 w-4" />
+                Connect Gmail
+              </Button>
+            </>
+          ) : (
+            <>
+              <h3 className="mt-4 text-base font-medium">All caught up</h3>
+              <p className="mt-1 max-w-xs text-sm text-muted-foreground">
+                Nothing waiting for review. New low-confidence matches will show
+                up here.
+              </p>
+            </>
+          )}
         </div>
       ) : (
         <div className="space-y-3">
