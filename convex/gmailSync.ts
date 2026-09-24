@@ -78,6 +78,7 @@ export const runEmailSync = internalAction({
         {
           userId,
           isApplicationEmail: result.isApplicationEmail,
+          role: result.role,
           company: result.company,
           status: result.status,
           confidence: result.confidence,

@@ -17,6 +17,7 @@ export const reconcileClassification = internalMutation({
     userId: v.id("users"),
     // From the classifier
     isApplicationEmail: v.boolean(),
+    role: v.string(),
     company: v.string(),
     status: v.union(StatusTypes, v.null()),
     confidence: v.number(),
@@ -53,6 +54,7 @@ export const reconcileClassification = internalMutation({
         emailFrom: args.emailFrom,
         emailSnippet: args.emailSnippet,
         emailSubject: args.emailSubject,
+        proposedRole: args.role,
         proposedCompany: args.company,
         proposedStatus: args.status,
         confidence: args.confidence,

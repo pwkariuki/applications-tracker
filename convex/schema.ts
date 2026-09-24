@@ -58,6 +58,7 @@ export default defineSchema({
     emailSubject: v.string(),
     emailSnippet: v.string(),
     emailFrom: v.optional(v.string()),
+    proposedRole: v.string(),
     proposedCompany: v.string(),
     proposedStatus: StatusTypes,
     confidence: v.number(),

@@ -64,7 +64,7 @@ export const approve = mutation({
       const newId = await ctx.db.insert("applications", {
         userId,
         company: item.proposedCompany,
-        role: "Unknown role",
+        role: item.proposedRole || "Unknown role",
         status: item.proposedStatus,
         source: "Email",
         notes: "",

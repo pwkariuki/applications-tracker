@@ -19,6 +19,9 @@ export const classificationSchema = z.object({
       False for newsletters, job alerts, marketing, promotions and all other emails not related to a job application.
     `,
   ),
+  role: z
+    .string()
+    .describe("The job title/role, or empty string if not mentioned."),
   company: z
     .string()
     .describe("The hiring company name, or empty string if unclear."),
