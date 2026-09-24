@@ -11,8 +11,11 @@
 import type * as applications from "../applications.js";
 import type * as auth from "../auth.js";
 import type * as classify from "../classify.js";
+import type * as cron from "../cron.js";
 import type * as gmail from "../gmail.js";
 import type * as gmailAuth from "../gmailAuth.js";
+import type * as gmailFetch from "../gmailFetch.js";
+import type * as gmailSync from "../gmailSync.js";
 import type * as gmailTokens from "../gmailTokens.js";
 import type * as http from "../http.js";
 import type * as notifications from "../notifications.js";
@@ -30,8 +33,11 @@ declare const fullApi: ApiFromModules<{
   applications: typeof applications;
   auth: typeof auth;
   classify: typeof classify;
+  cron: typeof cron;
   gmail: typeof gmail;
   gmailAuth: typeof gmailAuth;
+  gmailFetch: typeof gmailFetch;
+  gmailSync: typeof gmailSync;
   gmailTokens: typeof gmailTokens;
   http: typeof http;
   notifications: typeof notifications;

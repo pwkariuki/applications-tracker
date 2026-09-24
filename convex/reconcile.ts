@@ -1,7 +1,6 @@
 import { v } from "convex/values";
-import { mutation } from "./_generated/server";
+import { internalMutation } from "./_generated/server";
 import { StatusTypes } from "./schema";
-import { getAuthUserId } from "@convex-dev/auth/server";
 
 const CONFIDENCE_THRESHOLD = 0.75;
 
@@ -13,8 +12,9 @@ function normalizeCompanyName(name: string): string {
     .trim();
 }
 
-export const reconcileClassification = mutation({
+export const reconcileClassification = internalMutation({
   args: {
+    userId: v.id("users"),
     // From the classifier
     isApplicationEmail: v.boolean(),
     company: v.string(),
@@ -26,8 +26,7 @@ export const reconcileClassification = mutation({
     emailFrom: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
+    const { userId } = args;
 
     // Do nothing if this is not an application email
     if (!args.isApplicationEmail || args.status === null) {
@@ -67,7 +66,7 @@ export const reconcileClassification = mutation({
     // Auto-update and notify high confidence scores
     const app = matches[0];
 
-    if (args.status == app.status) {
+    if (args.status === app.status) {
       return { outcome: "no_change" as const };
     }
 
@@ -85,6 +84,6 @@ export const reconcileClassification = mutation({
       createdAt: Date.now(),
     });
 
-    return { outcome: "updated" as const, application: app._id };
+    return { outcome: "updated" as const, applicationId: app._id };
   },
 });
