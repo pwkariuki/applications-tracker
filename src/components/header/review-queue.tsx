@@ -97,8 +97,19 @@ function ReviewQueue() {
               <div className="mb-3 flex flex-wrap items-center gap-2 text-sm">
                 <span className="font-semibold">{item.proposedCompany}</span>
                 <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
-                <span className="text-muted-foreground">set status to</span>
-                <StatusBadge status={item.proposedStatus} />
+                {item.matchedApplicationId ? (
+                  <>
+                    <span className="text-muted-foreground">set status to</span>
+                    <StatusBadge status={item.proposedStatus} />
+                  </>
+                ) : (
+                  <>
+                    <span className="text-muted-foreground">
+                      create application
+                    </span>
+                    <StatusBadge status={item.proposedStatus} />
+                  </>
+                )}
               </div>
 
               <div className="flex gap-2">

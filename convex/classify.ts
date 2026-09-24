@@ -45,11 +45,11 @@ export async function classifyEmailContent(input: {
   const { output } = await generateText({
     model: anthropic("claude-sonnet-5"),
     output: Output.object({ schema: classificationSchema }),
-    prompt: `Classify this email for a job-application tracker.\n\n
-      From: ${input.from ?? "unknown"}\n
-      Subject: ${input.subject}\n
-      ${input.body}
-      `,
+    prompt:
+      `Classify this email for a job-application tracker.\n\n` +
+      `From: ${input.from ?? "unknown"}\n` +
+      `Subject: ${input.subject}\n` +
+      `${input.body}`,
   });
   return output;
 }

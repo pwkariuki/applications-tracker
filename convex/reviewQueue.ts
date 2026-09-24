@@ -59,12 +59,30 @@ export const approve = mutation({
       appId = match?._id ?? null;
     }
 
-    // No application found to approve
-    if (appId == null) {
+    // No application found to approve – create one
+    if (appId === null) {
+      const newId = await ctx.db.insert("applications", {
+        userId,
+        company: item.proposedCompany,
+        role: "Unknown role",
+        status: item.proposedStatus,
+        source: "Email",
+        notes: "",
+        lastUpdate: Date.now(),
+        autoUpdated: true,
+      });
+      await ctx.db.insert("notifications", {
+        userId,
+        applicationId: newId,
+        message: `Added ${item.proposedCompany} (${item.proposedStatus.replace("_", " ")})`,
+        read: false,
+        createdAt: Date.now(),
+      });
       await ctx.db.patch(id, { state: "approved" });
-      return { outcome: "no_application" as const };
+      return { outcome: "created" as const, applicationId: newId };
     }
 
+    // Application matched – update
     const app = await ctx.db.get(appId);
     if (!app || app.userId !== userId) {
       await ctx.db.patch(id, { state: "approved" });
