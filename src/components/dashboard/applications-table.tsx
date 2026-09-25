@@ -42,6 +42,8 @@ function ApplicationsTable({ data }: ApplicationsTableProps) {
 
   const navigate = useNavigate();
 
+  // TanStack Table isn't React Compiler compatible; the compiler skips this component.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,

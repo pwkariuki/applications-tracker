@@ -1,19 +1,12 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { STATUS_CONFIG } from "@/data/types";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import CompanyCell from "@/components/dashboard/company-cell";
 import { StatusBadge } from "@/components/dashboard/status-badge";
 import type { Doc } from "../../../convex/_generated/dataModel";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import DeleteApplicationDialog from "./delete-application-dialog";
-import { useState } from "react";
-import EditStatusDialog from "./edit-status-dialog";
+import ApplicationActions from "./application-actions";
 
 export const columns: ColumnDef<Doc<"applications">>[] = [
   {
@@ -80,32 +73,6 @@ export const columns: ColumnDef<Doc<"applications">>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const application = row.original;
-      const [open, setOpen] = useState<boolean>(false);
-
-      return (
-        <DropdownMenu open={open} onOpenChange={setOpen}>
-          <DropdownMenuTrigger asChild>
-            <Button variant={"ghost"} className="h-8 w-8 p-0">
-              <MoreHorizontal className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <EditStatusDialog
-              id={application._id}
-              status={application.status}
-              onEdit={() => setOpen(false)}
-            />
-            <DeleteApplicationDialog
-              id={application._id}
-              company={application.company}
-              role={application.role}
-              onDeleted={() => setOpen(false)}
-            />
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <ApplicationActions application={row.original} />,
   },
 ];

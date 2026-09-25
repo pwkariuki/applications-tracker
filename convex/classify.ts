@@ -1,0 +1,58 @@
+import { z } from "zod";
+import { generateText, Output } from "ai";
+import { anthropic } from "@ai-sdk/anthropic";
+
+export const STATUS_ENUM = z.enum([
+  "applied",
+  "phone_screen",
+  "technical",
+  "onsite",
+  "offer",
+  "signed",
+  "rejected",
+  "withdrawn",
+]);
+
+export const classificationSchema = z.object({
+  isApplicationEmail: z.boolean().describe(
+    `True only if this is about the recipient's own job application (interview invite, technical assessment, rejection, offer, next step).
+      False for newsletters, job alerts, marketing, promotions and all other emails not related to a job application.
+    `,
+  ),
+  role: z
+    .string()
+    .describe("The job title/role, or empty string if not mentioned."),
+  company: z
+    .string()
+    .describe("The hiring company name, or empty string if unclear."),
+  status: STATUS_ENUM.nullable().describe(
+    "The application stage this email indicates, or null if not an application email.",
+  ),
+  confidence: z
+    .number()
+    .min(0)
+    .max(1)
+    .describe(
+      "Confidence (0-1) that this classification is correct. Be conservative.",
+    ),
+  reasoning: z.string().describe("1-2 sentences explaining the call."),
+});
+
+export type Classification = z.infer<typeof classificationSchema>;
+
+export async function classifyEmailContent(input: {
+  subject: string;
+  body: string;
+  from?: string;
+}): Promise<Classification> {
+  const { output } = await generateText({
+    model: anthropic("claude-sonnet-5"),
+    output: Output.object({ schema: classificationSchema }),
+    prompt:
+      `Classify this email for a job-application tracker.\n\n` +
+      `From: ${input.from ?? "unknown"}\n` +
+      `Subject: ${input.subject}\n` +
+      `${input.body}`,
+  });
+  return output;
+}
