@@ -10,7 +10,7 @@ import {
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen.ts";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
-import PasswordLogin from "./auth/password-login.tsx";
+import PasswordLogin from "./components/auth/password-login.tsx";
 
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
 
