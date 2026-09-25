@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { LogOut, Briefcase } from "lucide-react";
+import { LogOut, Briefcase, User } from "lucide-react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
@@ -67,10 +67,12 @@ function Navbar() {
                 )}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {/* <DropdownMenuItem disabled>
-                <User className="h-4 w-4" />
-                Settings
-              </DropdownMenuItem> */}
+              <DropdownMenuItem asChild>
+                <Link to="/settings">
+                  <User className="h-4 w-4" />
+                  Settings
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => signOut()}
                 className="text-destructive focus:text-destructive"
@@ -87,5 +89,6 @@ function Navbar() {
 }
 import Notifications from "./notifications";
 import ReviewNavButton from "./review-nav-button";
+import { Link } from "@tanstack/react-router";
 
 export default Navbar;

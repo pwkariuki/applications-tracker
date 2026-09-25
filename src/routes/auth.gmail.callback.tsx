@@ -31,24 +31,20 @@ function GmailCallback() {
     // sitting in the URL bar or browser history.
     window.history.replaceState(null, "", window.location.pathname);
 
-    if (oauthError) {
-      setError("Gmail connection was cancelled.");
-      return;
-    }
-    if (!code) {
-      setError("No authorization code returned.");
-      return;
-    }
-    if (!returnedState || returnedState !== expectedState) {
-      setError(
-        "Couldn't verify this request came from you. Please try connecting again.",
-      );
-      return;
-    }
+    // Every failure throws so errors surface through the single catch below.
+    const connect = async () => {
+      if (oauthError) throw new Error("Gmail connection was cancelled.");
+      if (!code) throw new Error("No authorization code returned.");
+      if (!returnedState || returnedState !== expectedState) {
+        throw new Error(
+          "Couldn't verify this request came from you. Please try connecting again.",
+        );
+      }
+      await exchange({ code });
+      await navigate({ to: "/review" });
+    };
 
-    exchange({ code })
-      .then(() => navigate({ to: "/review" }))
-      .catch((e) => setError(e.message ?? "Failed to connect Gmail."));
+    connect().catch((e) => setError(e.message ?? "Failed to connect Gmail."));
   }, [exchange, navigate]);
 
   return (

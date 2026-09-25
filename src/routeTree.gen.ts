@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ReviewRouteImport } from './routes/review'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApplicationsIdRouteImport } from './routes/applications/$id'
 import { Route as AuthGmailCallbackRouteImport } from './routes/auth.gmail.callback'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReviewRoute = ReviewRouteImport.update({
   id: '/review',
   path: '/review',
@@ -38,12 +44,14 @@ const AuthGmailCallbackRoute = AuthGmailCallbackRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/review': typeof ReviewRoute
+  '/settings': typeof SettingsRoute
   '/applications/$id': typeof ApplicationsIdRoute
   '/auth/gmail/callback': typeof AuthGmailCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/review': typeof ReviewRoute
+  '/settings': typeof SettingsRoute
   '/applications/$id': typeof ApplicationsIdRoute
   '/auth/gmail/callback': typeof AuthGmailCallbackRoute
 }
@@ -51,18 +59,30 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/review': typeof ReviewRoute
+  '/settings': typeof SettingsRoute
   '/applications/$id': typeof ApplicationsIdRoute
   '/auth/gmail/callback': typeof AuthGmailCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/review' | '/applications/$id' | '/auth/gmail/callback'
+  fullPaths:
+    | '/'
+    | '/review'
+    | '/settings'
+    | '/applications/$id'
+    | '/auth/gmail/callback'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/review' | '/applications/$id' | '/auth/gmail/callback'
+  to:
+    | '/'
+    | '/review'
+    | '/settings'
+    | '/applications/$id'
+    | '/auth/gmail/callback'
   id:
     | '__root__'
     | '/'
     | '/review'
+    | '/settings'
     | '/applications/$id'
     | '/auth/gmail/callback'
   fileRoutesById: FileRoutesById
@@ -70,12 +90,20 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ReviewRoute: typeof ReviewRoute
+  SettingsRoute: typeof SettingsRoute
   ApplicationsIdRoute: typeof ApplicationsIdRoute
   AuthGmailCallbackRoute: typeof AuthGmailCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/review': {
       id: '/review'
       path: '/review'
@@ -110,6 +138,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ReviewRoute: ReviewRoute,
+  SettingsRoute: SettingsRoute,
   ApplicationsIdRoute: ApplicationsIdRoute,
   AuthGmailCallbackRoute: AuthGmailCallbackRoute,
 }

@@ -12,7 +12,7 @@ import {
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
-import { colorFor } from "@/components/dashboard/company-cell";
+import { colorFor } from "@/lib/company-color";
 import SelectStatus from "./select-status";
 import NotesEditor from "./edit-notes";
 

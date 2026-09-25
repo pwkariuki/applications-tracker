@@ -95,7 +95,9 @@ function ReviewQueue() {
               </p>
 
               <div className="mb-3 flex flex-wrap items-center gap-2 text-sm">
-                <span className="font-semibold">{item.proposedRole} · {item.proposedCompany}</span>
+                <span className="font-semibold">
+                  {item.proposedRole} · {item.proposedCompany}
+                </span>
                 <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
                 {item.matchedApplicationId ? (
                   <>
